@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UserVoice Ideas Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .tabs {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0 30px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .tab:hover {
+            background: #f8f9ff;
+        }
+
+        .tab.active {
+            border-bottom-color: #667eea;
+            color: #667eea;
+        }
+
+        .tab .badge {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            margin-left: 5px;
+            font-weight: bold;
+        }
+
+        .tab.active .badge {
+            background: #667eea;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px 30px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-item .label {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-item .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .ideas-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .table-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 2px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h3 {
+            color: #333;
+        }
+
+        .export-btn {
+            padding: 8px 16px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+
+        .export-btn:hover {
+            background: #229954;
+        }
+
+        .ideas-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .idea-card {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s ease;
+        }
+
+        .idea-card:hover {
+            background: #f8f9ff;
+        }
+
+        .idea-card:last-child {
+            border-bottom: none;
+        }
+
+        .idea-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        .idea-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .idea-title a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .idea-title a:hover {
+            text-decoration: underline;
+        }
+
+        .idea-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+
+        .badge.priority-high {
+            background: #fee;
+            color: #e74c3c;
+        }
+
+        .badge.priority-medium {
+            background: #fef5e7;
+            color: #f39c12;
+        }
+
+        .badge.priority-low {
+            background: #eafaf1;
+            color: #27ae60;
+        }
+
+        .badge.outdated {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .badge.has-jira {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge.has-status {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .idea-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .idea-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .idea-description {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .idea-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .no-results {
+            padding: 60px 20px;
+            text-align: center;
+            color: #999;
+        }
+
+        .no-results-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .loading {
+            padding: 60px 20px;
+            text-align: center;
+            color: #667eea;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .pagination button {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .definition-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .definition-box p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .definition-box .criteria {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 0.9em;
+            border: 1px solid #e0e0e0;
+        }
+
+        .definition-box .criteria strong {
+            color: #667eea;
+        }
+
+        .definition-box ul {
+            margin: 10px 0 10px 20px;
+            color: #555;
+        }
+
+        .definition-box li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔍 UserVoice Ideas Dashboard</h1>
+        <p class="subtitle">Comprehensive view of all ideas with filtering and analysis • Last updated: June 15, 2026</p>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="all">
+            All Ideas <span class="badge" id="all-count">0</span>
+        </div>
+        <div class="tab" data-tab="outdated">
+            Outdated <span class="badge" id="outdated-count">0</span>
+        </div>
+        <div class="tab" data-tab="high-priority">
+            High Priority <span class="badge" id="high-priority-count">0</span>
+        </div>
+        <div class="tab" data-tab="no-jira">
+            No Jira <span class="badge" id="no-jira-count">0</span>
+        </div>
+        <div class="tab" data-tab="no-status">
+            No Status <span class="badge" id="no-status-count">0</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- All Ideas Tab -->
+        <div class="tab-content active" id="all-tab">
+            <div class="definition-box">
+                <h3>📋 All Ideas</h3>
+                <p>This tab shows the complete dataset of all UserVoice ideas in your system. Use the filters below to narrow down by specific criteria.</p>
+                <div class="criteria">
+                    <strong>Includes:</strong> All 12,186 ideas regardless of age, status, or engagement level
+                </div>
+            </div>
+
+            <div class="filters">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Search</label>
+                        <input type="text" id="search-all" placeholder="Search title or description...">
+                    </div>
+                    <div class="filter-group">
+                        <label>Priority</label>
+                        <select id="priority-all">
+                            <option value="">All Priorities</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Forum</label>
+                        <select id="forum-all">
+                            <option value="">All Forums</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Year Created</label>
+                        <select id="year-all">
+                            <option value="">All Years</option>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021 and earlier</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-buttons">
+                    <button class="btn btn-primary" onclick="applyFilters('all')">Apply Filters</button>
+                    <button class="btn btn-secondary" onclick="resetFilters('all')">Reset</button>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="label">Showing</div>
+                    <div class="value" id="showing-all">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Avg Age (days)</div>
+                    <div class="value" id="avg-age-all">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Total Votes</div>
+                    <div class="value" id="total-votes-all">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Total Revenue</div>
+                    <div class="value" id="total-revenue-all">$0</div>
+                </div>
+            </div>
+
+            <div class="ideas-table">
+                <div class="table-header">
+                    <h3>Ideas List</h3>
+                    <button class="export-btn" onclick="exportToCSV('all')">📥 Export to CSV</button>
+                </div>
+                <div class="ideas-list" id="ideas-list-all"></div>
+                <div class="pagination" id="pagination-all"></div>
+            </div>
+        </div>
+
+        <!-- Outdated Ideas Tab -->
+        <div class="tab-content" id="outdated-tab">
+            <div class="definition-box">
+                <h3>⏰ Outdated Ideas</h3>
+                <p>Ideas that are old or have been inactive for an extended period. These are strong candidates for cleanup, archival, or re-evaluation.</p>
+                <div class="criteria">
+                    <strong>Definition:</strong> An idea is "outdated" if it meets ANY of these criteria:
+                    <ul>
+                        <li><strong>Created before 2024</strong> (2023 or earlier)</li>
+                        <li><strong>Inactive for 180+ days</strong> (no updates in the last 6 months)</li>
+                    </ul>
+                </div>
+                <p><strong>Action Recommendation:</strong> Review for archival if there's no engagement (zero votes, zero comments, no Jira link). High-engagement outdated ideas may warrant PM review to determine if they're still relevant.</p>
+            </div>
+
+            <div class="filters">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Search</label>
+                        <input type="text" id="search-outdated" placeholder="Search title or description...">
+                    </div>
+                    <div class="filter-group">
+                        <label>Has Engagement?</label>
+                        <select id="engagement-outdated">
+                            <option value="">All</option>
+                            <option value="yes">Has Votes/Comments</option>
+                            <option value="no">No Engagement</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Has Jira?</label>
+                        <select id="jira-outdated">
+                            <option value="">All</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sort By</label>
+                        <select id="sort-outdated">
+                            <option value="age">Oldest First</option>
+                            <option value="votes">Most Votes</option>
+                            <option value="revenue">Highest Revenue</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-buttons">
+                    <button class="btn btn-primary" onclick="applyFilters('outdated')">Apply Filters</button>
+                    <button class="btn btn-secondary" onclick="resetFilters('outdated')">Reset</button>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="label">Outdated Ideas</div>
+                    <div class="value" id="showing-outdated">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Can Archive</div>
+                    <div class="value" id="can-archive-outdated">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Need Review</div>
+                    <div class="value" id="need-review-outdated">0</div>
+                </div>
+            </div>
+
+            <div class="ideas-table">
+                <div class="table-header">
+                    <h3>Outdated Ideas (Created before 2024 or inactive 180+ days)</h3>
+                    <button class="export-btn" onclick="exportToCSV('outdated')">📥 Export to CSV</button>
+                </div>
+                <div class="ideas-list" id="ideas-list-outdated"></div>
+                <div class="pagination" id="pagination-outdated"></div>
+            </div>
+        </div>
+
+        <!-- High Priority Tab -->
+        <div class="tab-content" id="high-priority-tab">
+            <div class="definition-box">
+                <h3>⭐ High Priority Ideas</h3>
+                <p>Ideas with significant customer engagement, high revenue impact, or substantial discussion. These represent your most important customer feedback and should be prioritized for product team review.</p>
+                <div class="criteria">
+                    <strong>Definition:</strong> An idea is "high priority" if it meets ANY of these criteria:
+                    <ul>
+                        <li><strong>10+ votes</strong> from customers</li>
+                        <li><strong>$100,000+ in revenue</strong> attached to the requesting accounts</li>
+                        <li><strong>5+ comments</strong> indicating active discussion</li>
+                    </ul>
+                </div>
+                <p><strong>Action Recommendation:</strong> These ideas should have Jira tickets created (if not already linked) and be assigned to product area owners for evaluation and roadmap consideration.</p>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="label">High Priority Ideas</div>
+                    <div class="value" id="showing-high-priority">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">With Jira</div>
+                    <div class="value" id="with-jira-high-priority">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Without Jira</div>
+                    <div class="value" id="without-jira-high-priority">0</div>
+                </div>
+            </div>
+
+            <div class="ideas-table">
+                <div class="table-header">
+                    <h3>High Priority Ideas (10+ votes OR $100k+ revenue OR 5+ comments)</h3>
+                    <button class="export-btn" onclick="exportToCSV('high-priority')">📥 Export to CSV</button>
+                </div>
+                <div class="ideas-list" id="ideas-list-high-priority"></div>
+                <div class="pagination" id="pagination-high-priority"></div>
+            </div>
+        </div>
+
+        <!-- No Jira Tab -->
+        <div class="tab-content" id="no-jira-tab">
+            <div class="definition-box">
+                <h3>🔗 No Jira Link</h3>
+                <p>Ideas that have not been connected to your product development tracking system. This indicates these ideas haven't been formally triaged, evaluated, or added to your product backlog.</p>
+                <div class="criteria">
+                    <strong>Definition:</strong> Ideas with an empty "Linked Jira Issues" field
+                </div>
+                <p><strong>Why This Matters:</strong> Without Jira linkage, there's no visibility into whether these ideas are being considered, worked on, or closed. This represents a gap in your feedback loop.</p>
+                <p><strong>Action Recommendation:</strong></p>
+                <ul>
+                    <li><strong>High-value ideas</strong> (with votes/revenue): Create Jira tickets and assign to PMs</li>
+                    <li><strong>Low-value ideas</strong> (no engagement): Consider archiving with explanation</li>
+                    <li><strong>Recent ideas</strong> (2025-2026): Route through your intake process</li>
+                </ul>
+            </div>
+
+            <div class="ideas-table">
+                <div class="table-header">
+                    <h3>Ideas Without Jira Links</h3>
+                    <button class="export-btn" onclick="exportToCSV('no-jira')">📥 Export to CSV</button>
+                </div>
+                <div class="ideas-list" id="ideas-list-no-jira"></div>
+                <div class="pagination" id="pagination-no-jira"></div>
+            </div>
+        </div>
+
+        <!-- No Status Tab -->
+        <div class="tab-content" id="no-status-tab">
+            <div class="definition-box">
+                <h3>📝 No Public Status</h3>
+                <p>Ideas that lack a customer-facing status update. This means customers who submitted or voted on these ideas have received no communication about whether their feedback is under review, planned, in progress, or completed.</p>
+                <div class="criteria">
+                    <strong>Definition:</strong> Ideas with an empty "Public Status Name" field (no status like "Under Review", "Planned", "Completed", etc.)
+                </div>
+                <p><strong>Why This Matters:</strong> Lack of status updates creates a poor customer experience and breaks the feedback loop. Customers don't know if their input was heard or acted upon.</p>
+                <p><strong>Action Recommendation:</strong></p>
+                <ul>
+                    <li><strong>Ideas with Jira links:</strong> Sync status from Jira → UserVoice (quick win!)</li>
+                    <li><strong>Ideas under evaluation:</strong> Set status to "Under Review"</li>
+                    <li><strong>Ideas being archived:</strong> Set status to "Declined" or "Archived" with explanation</li>
+                    <li><strong>Completed ideas:</strong> Set status to "Completed" and link to release notes</li>
+                </ul>
+                <p><strong>Note:</strong> Currently 100% of ideas (12,186) have no public status - this is your biggest opportunity to improve customer communication.</p>
+            </div>
+
+            <div class="ideas-table">
+                <div class="table-header">
+                    <h3>Ideas Without Public Status</h3>
+                    <button class="export-btn" onclick="exportToCSV('no-status')">📥 Export to CSV</button>
+                </div>
+                <div class="ideas-list" id="ideas-list-no-status"></div>
+                <div class="pagination" id="pagination-no-status"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allIdeas = [];
+        let filteredIdeas = {};
+        const itemsPerPage = 50;
+        let currentPage = {};
+
+        // Load data
+        async function loadData() {
+            try {
+                const response = await fetch('uservoice_ideas.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                allIdeas = await response.json();
+                console.log('Loaded', allIdeas.length, 'ideas');
+                initializeDashboard();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.querySelector('.container').innerHTML = '<div class="no-results"><div class="no-results-icon">⚠️</div><h3>Error loading data</h3><p>Could not load uservoice_ideas.json. Error: ' + error.message + '</p><p>Make sure the local server is running and the file exists.</p></div>';
+            }
+        }
+
+        function initializeDashboard() {
+            // Populate forum filter
+            const forums = [...new Set(allIdeas.map(i => i.forum).filter(f => f))].sort();
+            const forumSelect = document.getElementById('forum-all');
+            forums.forEach(forum => {
+                const option = document.createElement('option');
+                option.value = forum;
+                option.textContent = forum;
+                forumSelect.appendChild(option);
+            });
+
+            // Initialize filtered ideas for each tab
+            filteredIdeas = {
+                'all': allIdeas,
+                'outdated': allIdeas.filter(i => i.is_outdated),
+                'high-priority': allIdeas.filter(i => i.priority === 'High'),
+                'no-jira': allIdeas.filter(i => !i.has_jira),
+                'no-status': allIdeas.filter(i => !i.has_status)
+            };
+
+            // Update counts
+            updateTabCounts();
+
+            // Initialize current page
+            Object.keys(filteredIdeas).forEach(tab => {
+                currentPage[tab] = 1;
+            });
+
+            // Render active tab
+            renderIdeas('all');
+        }
+
+        function updateTabCounts() {
+            document.getElementById('all-count').textContent = filteredIdeas['all'].length.toLocaleString();
+            document.getElementById('outdated-count').textContent = filteredIdeas['outdated'].length.toLocaleString();
+            document.getElementById('high-priority-count').textContent = filteredIdeas['high-priority'].length.toLocaleString();
+            document.getElementById('no-jira-count').textContent = filteredIdeas['no-jira'].length.toLocaleString();
+            document.getElementById('no-status-count').textContent = filteredIdeas['no-status'].length.toLocaleString();
+        }
+
+        function renderIdeas(tab) {
+            const ideas = filteredIdeas[tab];
+            const listEl = document.getElementById(`ideas-list-${tab}`);
+            const page = currentPage[tab] || 1;
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageIdeas = ideas.slice(start, end);
+
+            if (ideas.length === 0) {
+                listEl.innerHTML = '<div class="no-results"><div class="no-results-icon">🔍</div><h3>No ideas found</h3><p>Try adjusting your filters.</p></div>';
+            } else {
+                listEl.innerHTML = pageIdeas.map(idea => renderIdeaCard(idea)).join('');
+            }
+
+            // Update stats
+            updateStats(tab, ideas);
+
+            // Render pagination
+            renderPagination(tab, ideas.length);
+        }
+
+        function renderIdeaCard(idea) {
+            const formatRevenue = (rev) => {
+                if (rev >= 1000000) return `$${(rev / 1000000).toFixed(1)}M`;
+                if (rev >= 1000) return `$${(rev / 1000).toFixed(0)}k`;
+                return `$${rev.toFixed(0)}`;
+            };
+
+            const formatDate = (dateStr) => {
+                if (!dateStr) return 'N/A';
+                return new Date(dateStr).toLocaleDateString();
+            };
+
+            return `
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <div class="idea-title">
+                            <a href="${idea.admin_url}" target="_blank">${idea.title || 'Untitled Idea'}</a>
+                        </div>
+                        <div class="idea-badges">
+                            <span class="badge priority-${idea.priority.toLowerCase()}">${idea.priority}</span>
+                            ${idea.is_outdated ? '<span class="badge outdated">Outdated</span>' : ''}
+                            ${idea.has_jira ? '<span class="badge has-jira">Has Jira</span>' : ''}
+                            ${idea.has_status ? '<span class="badge has-status">Has Status</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="idea-meta">
+                        <span>🗳️ ${idea.votes} votes</span>
+                        <span>💬 ${idea.comments} comments</span>
+                        <span>💰 ${formatRevenue(idea.revenue)}</span>
+                        <span>📅 ${idea.age_days} days old</span>
+                        ${idea.forum ? `<span>📁 ${idea.forum}</span>` : ''}
+                    </div>
+                    ${idea.description ? `<div class="idea-description">${idea.description}...</div>` : ''}
+                    <div class="idea-footer">
+                        <span>Created: ${formatDate(idea.created)} by ${idea.creator || 'Unknown'}</span>
+                        <span>ID: ${idea.id}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateStats(tab, ideas) {
+            if (tab === 'all') {
+                document.getElementById('showing-all').textContent = ideas.length.toLocaleString();
+                const avgAge = ideas.reduce((sum, i) => sum + i.age_days, 0) / ideas.length || 0;
+                document.getElementById('avg-age-all').textContent = Math.round(avgAge);
+                const totalVotes = ideas.reduce((sum, i) => sum + i.votes, 0);
+                document.getElementById('total-votes-all').textContent = totalVotes.toLocaleString();
+                const totalRevenue = ideas.reduce((sum, i) => sum + i.revenue, 0);
+                document.getElementById('total-revenue-all').textContent = `$${(totalRevenue / 1000000).toFixed(1)}M`;
+            } else if (tab === 'outdated') {
+                document.getElementById('showing-outdated').textContent = ideas.length.toLocaleString();
+                const canArchive = ideas.filter(i => i.votes === 0 && i.comments === 0 && !i.has_jira).length;
+                document.getElementById('can-archive-outdated').textContent = canArchive.toLocaleString();
+                const needReview = ideas.filter(i => i.votes > 0 || i.comments > 0 || i.revenue > 0).length;
+                document.getElementById('need-review-outdated').textContent = needReview.toLocaleString();
+            } else if (tab === 'high-priority') {
+                document.getElementById('showing-high-priority').textContent = ideas.length.toLocaleString();
+                const withJira = ideas.filter(i => i.has_jira).length;
+                document.getElementById('with-jira-high-priority').textContent = withJira.toLocaleString();
+                document.getElementById('without-jira-high-priority').textContent = (ideas.length - withJira).toLocaleString();
+            }
+        }
+
+        function renderPagination(tab, totalItems) {
+            const paginationEl = document.getElementById(`pagination-${tab}`);
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const page = currentPage[tab] || 1;
+
+            if (totalPages <= 1) {
+                paginationEl.innerHTML = '';
+                return;
+            }
+
+            paginationEl.innerHTML = `
+                <button onclick="changePage('${tab}', ${page - 1})" ${page === 1 ? 'disabled' : ''}>← Previous</button>
+                <span class="page-info">Page ${page} of ${totalPages} (${totalItems.toLocaleString()} ideas)</span>
+                <button onclick="changePage('${tab}', ${page + 1})" ${page === totalPages ? 'disabled' : ''}>Next →</button>
+            `;
+        }
+
+        function changePage(tab, newPage) {
+            currentPage[tab] = newPage;
+            renderIdeas(tab);
+            document.getElementById(`ideas-list-${tab}`).scrollTop = 0;
+        }
+
+        function applyFilters(tab) {
+            if (tab === 'all') {
+                const search = document.getElementById('search-all').value.toLowerCase();
+                const priority = document.getElementById('priority-all').value;
+                const forum = document.getElementById('forum-all').value;
+                const year = document.getElementById('year-all').value;
+
+                filteredIdeas['all'] = allIdeas.filter(idea => {
+                    if (search && !idea.title.toLowerCase().includes(search) && !idea.description.toLowerCase().includes(search)) return false;
+                    if (priority && idea.priority !== priority) return false;
+                    if (forum && idea.forum !== forum) return false;
+                    if (year) {
+                        const ideaYear = idea.created.substring(0, 4);
+                        if (year === '2021' && ideaYear > '2021') return false;
+                        if (year !== '2021' && ideaYear !== year) return false;
+                    }
+                    return true;
+                });
+            } else if (tab === 'outdated') {
+                const search = document.getElementById('search-outdated').value.toLowerCase();
+                const engagement = document.getElementById('engagement-outdated').value;
+                const jira = document.getElementById('jira-outdated').value;
+                const sort = document.getElementById('sort-outdated').value;
+
+                let filtered = allIdeas.filter(i => i.is_outdated);
+
+                if (search) {
+                    filtered = filtered.filter(idea =>
+                        idea.title.toLowerCase().includes(search) ||
+                        idea.description.toLowerCase().includes(search)
+                    );
+                }
+
+                if (engagement === 'yes') {
+                    filtered = filtered.filter(i => i.votes > 0 || i.comments > 0);
+                } else if (engagement === 'no') {
+                    filtered = filtered.filter(i => i.votes === 0 && i.comments === 0);
+                }
+
+                if (jira === 'yes') {
+                    filtered = filtered.filter(i => i.has_jira);
+                } else if (jira === 'no') {
+                    filtered = filtered.filter(i => !i.has_jira);
+                }
+
+                // Sort
+                if (sort === 'age') {
+                    filtered.sort((a, b) => b.age_days - a.age_days);
+                } else if (sort === 'votes') {
+                    filtered.sort((a, b) => b.votes - a.votes);
+                } else if (sort === 'revenue') {
+                    filtered.sort((a, b) => b.revenue - a.revenue);
+                }
+
+                filteredIdeas['outdated'] = filtered;
+            }
+
+            currentPage[tab] = 1;
+            updateTabCounts();
+            renderIdeas(tab);
+        }
+
+        function resetFilters(tab) {
+            if (tab === 'all') {
+                document.getElementById('search-all').value = '';
+                document.getElementById('priority-all').value = '';
+                document.getElementById('forum-all').value = '';
+                document.getElementById('year-all').value = '';
+                filteredIdeas['all'] = allIdeas;
+            } else if (tab === 'outdated') {
+                document.getElementById('search-outdated').value = '';
+                document.getElementById('engagement-outdated').value = '';
+                document.getElementById('jira-outdated').value = '';
+                document.getElementById('sort-outdated').value = 'age';
+                filteredIdeas['outdated'] = allIdeas.filter(i => i.is_outdated);
+            }
+
+            currentPage[tab] = 1;
+            updateTabCounts();
+            renderIdeas(tab);
+        }
+
+        function exportToCSV(tab) {
+            const ideas = filteredIdeas[tab];
+            const headers = ['ID', 'Title', 'Created', 'Age (days)', 'Votes', 'Comments', 'Revenue', 'Priority', 'Has Jira', 'Has Status', 'Forum', 'URL'];
+            const rows = ideas.map(i => [
+                i.id,
+                `"${i.title.replace(/"/g, '""')}"`,
+                i.created,
+                i.age_days,
+                i.votes,
+                i.comments,
+                i.revenue,
+                i.priority,
+                i.has_jira ? 'Yes' : 'No',
+                i.has_status ? 'Yes' : 'No',
+                i.forum,
+                i.admin_url
+            ]);
+
+            const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `uservoice-${tab}-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+
+                // Update active tab
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Update active content
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+
+                // Render ideas
+                renderIdeas(tabName);
+            });
+        });
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>
