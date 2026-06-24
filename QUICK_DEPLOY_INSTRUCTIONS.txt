@@ -1,0 +1,49 @@
+🚀 DEPLOY TO GITHUB PAGES - 3 STEPS
+====================================
+
+STEP 1: Create GitHub Repository
+---------------------------------
+Click this link: https://github.com/new
+
+Fill in:
+  • Repository name: uservoice-dashboard
+  • Description: Interactive UserVoice ideas dashboard
+  • Public repository: ✓ (checked)
+  • Do NOT initialize with README
+  
+Click: "Create repository"
+
+
+STEP 2: Push Your Code
+-----------------------
+Copy and paste these commands into Terminal:
+
+cd /Users/marcin.widla/uservoice-dashboard
+git remote add origin https://github.com/YOUR-USERNAME/uservoice-dashboard.git
+git push -u origin main
+
+(Replace YOUR-USERNAME with your actual GitHub username)
+
+If asked for password, use a Personal Access Token from:
+https://github.com/settings/tokens/new
+
+
+STEP 3: Enable GitHub Pages
+----------------------------
+1. Go to: https://github.com/YOUR-USERNAME/uservoice-dashboard/settings/pages
+2. Under "Source":
+   - Branch: main
+   - Folder: / (root)
+3. Click "Save"
+
+
+YOUR DASHBOARD WILL BE LIVE AT:
+================================
+https://YOUR-USERNAME.github.io/uservoice-dashboard/
+
+(Wait 1-2 minutes after enabling Pages)
+
+
+NEED HELP?
+----------
+Run: ./deploy.sh

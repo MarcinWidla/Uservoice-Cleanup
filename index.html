@@ -464,11 +464,14 @@
         <div class="tab" data-tab="high-priority">
             High Priority <span class="badge" id="high-priority-count">0</span>
         </div>
+        <div class="tab" data-tab="status-gap">
+            Status Gap <span class="badge" id="status-gap-count">0</span>
+        </div>
         <div class="tab" data-tab="no-jira">
             No Jira <span class="badge" id="no-jira-count">0</span>
         </div>
         <div class="tab" data-tab="no-status">
-            No Status <span class="badge" id="no-status-count">0</span>
+            No Public Status <span class="badge" id="no-status-count">0</span>
         </div>
     </div>
 
@@ -670,6 +673,56 @@
             </div>
         </div>
 
+        <!-- Status Gap Tab -->
+        <div class="tab-content" id="status-gap-tab">
+            <div class="definition-box">
+                <h3>⚠️ Status Gap</h3>
+                <p>Ideas with internal tracking (Jira, assigned owner, or labels) BUT no public status. This is the critical gap - you're working on these internally but customers hear nothing.</p>
+                <div class="criteria">
+                    <strong>Definition:</strong> Ideas that have ANY internal status indicator:
+                    <ul>
+                        <li><strong>Linked to Jira</strong> - Being tracked in your backlog</li>
+                        <li><strong>Assigned owner</strong> - Someone is responsible</li>
+                        <li><strong>Has labels</strong> - Categorized/prioritized (Critical, PENT, 5-biz-day SLA, etc.)</li>
+                    </ul>
+                    <strong>BUT</strong> have NO public status update for customers
+                </div>
+                <p><strong>Why This Matters:</strong> These represent broken feedback loops - internal work happening but zero customer communication.</p>
+                <p><strong>Action Recommendation:</strong> Map internal status → public status:</p>
+                <ul>
+                    <li><strong>Has Jira + In Progress</strong> → Set public status "Planned"</li>
+                    <li><strong>Has label "Critical"</strong> → Set public status "Under Review"</li>
+                    <li><strong>Has label "QA"</strong> → Set public status "In Progress"</li>
+                    <li><strong>Is closed</strong> → Set public status "Completed"</li>
+                </ul>
+                <p><strong>Quick Win:</strong> These 10,722 ideas can be bulk-updated to improve customer communication!</p>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="label">Status Gap Ideas</div>
+                    <div class="value" id="showing-status-gap">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">With Jira</div>
+                    <div class="value" id="with-jira-status-gap">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">With Owner</div>
+                    <div class="value" id="with-owner-status-gap">0</div>
+                </div>
+            </div>
+
+            <div class="ideas-table">
+                <div class="table-header">
+                    <h3>Ideas With Internal Status But No Public Communication</h3>
+                    <button class="export-btn" onclick="exportToCSV('status-gap')">📥 Export to CSV</button>
+                </div>
+                <div class="ideas-list" id="ideas-list-status-gap"></div>
+                <div class="pagination" id="pagination-status-gap"></div>
+            </div>
+        </div>
+
         <!-- No Jira Tab -->
         <div class="tab-content" id="no-jira-tab">
             <div class="definition-box">
@@ -765,8 +818,9 @@
                 'all': allIdeas,
                 'outdated': allIdeas.filter(i => i.is_outdated),
                 'high-priority': allIdeas.filter(i => i.priority === 'High'),
+                'status-gap': allIdeas.filter(i => i.status_gap),
                 'no-jira': allIdeas.filter(i => !i.has_jira),
-                'no-status': allIdeas.filter(i => !i.has_status)
+                'no-status': allIdeas.filter(i => !i.has_public_status)
             };
 
             // Update counts
@@ -785,6 +839,7 @@
             document.getElementById('all-count').textContent = filteredIdeas['all'].length.toLocaleString();
             document.getElementById('outdated-count').textContent = filteredIdeas['outdated'].length.toLocaleString();
             document.getElementById('high-priority-count').textContent = filteredIdeas['high-priority'].length.toLocaleString();
+            document.getElementById('status-gap-count').textContent = filteredIdeas['status-gap'].length.toLocaleString();
             document.getElementById('no-jira-count').textContent = filteredIdeas['no-jira'].length.toLocaleString();
             document.getElementById('no-status-count').textContent = filteredIdeas['no-status'].length.toLocaleString();
         }
@@ -831,8 +886,10 @@
                         <div class="idea-badges">
                             <span class="badge priority-${idea.priority.toLowerCase()}">${idea.priority}</span>
                             ${idea.is_outdated ? '<span class="badge outdated">Outdated</span>' : ''}
-                            ${idea.has_jira ? '<span class="badge has-jira">Has Jira</span>' : ''}
-                            ${idea.has_status ? '<span class="badge has-status">Has Status</span>' : ''}
+                            ${idea.has_public_status ? '<span class="badge has-status">Public Status</span>' : ''}
+                            ${idea.has_jira ? '<span class="badge has-jira">Jira</span>' : ''}
+                            ${idea.has_owner ? '<span class="badge has-jira">Owner</span>' : ''}
+                            ${idea.status_gap ? '<span class="badge outdated">Gap</span>' : ''}
                         </div>
                     </div>
                     <div class="idea-meta">
@@ -841,7 +898,10 @@
                         <span>💰 ${formatRevenue(idea.revenue)}</span>
                         <span>📅 ${idea.age_days} days old</span>
                         ${idea.forum ? `<span>📁 ${idea.forum}</span>` : ''}
+                        ${idea.public_status ? `<span>📋 Status: ${idea.public_status}</span>` : ''}
+                        ${idea.assigned_owner_name ? `<span>👤 ${idea.assigned_owner_name}</span>` : ''}
                     </div>
+                    ${idea.labels && idea.labels.length > 0 ? `<div class="idea-meta"><span>🏷️ ${idea.labels.slice(0,3).join(', ')}${idea.labels.length > 3 ? '...' : ''}</span></div>` : ''}
                     ${idea.description ? `<div class="idea-description">${idea.description}...</div>` : ''}
                     <div class="idea-footer">
                         <span>Created: ${formatDate(idea.created)} by ${idea.creator || 'Unknown'}</span>
@@ -871,6 +931,12 @@
                 const withJira = ideas.filter(i => i.has_jira).length;
                 document.getElementById('with-jira-high-priority').textContent = withJira.toLocaleString();
                 document.getElementById('without-jira-high-priority').textContent = (ideas.length - withJira).toLocaleString();
+            } else if (tab === 'status-gap') {
+                document.getElementById('showing-status-gap').textContent = ideas.length.toLocaleString();
+                const withJira = ideas.filter(i => i.has_jira).length;
+                const withOwner = ideas.filter(i => i.has_owner).length;
+                document.getElementById('with-jira-status-gap').textContent = withJira.toLocaleString();
+                document.getElementById('with-owner-status-gap').textContent = withOwner.toLocaleString();
             }
         }
 
