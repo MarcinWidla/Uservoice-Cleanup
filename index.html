@@ -855,9 +855,28 @@
                 </ul>
             </div>
 
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="label">No Internal Status</div>
+                    <div class="value" id="showing-no-internal">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">High Priority</div>
+                    <div class="value" id="high-priority-no-internal">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Recent (2025-2026)</div>
+                    <div class="value" id="recent-no-internal">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Outdated</div>
+                    <div class="value" id="outdated-no-internal">0</div>
+                </div>
+            </div>
+
             <div class="ideas-table">
                 <div class="table-header">
-                    <h3>Ideas With No Internal Tracking</h3>
+                    <h3>Ideas With No Internal Tracking (1,464 completely untracked)</h3>
                     <button class="export-btn" onclick="exportToCSV('no-internal')">📥 Export to CSV</button>
                 </div>
                 <div class="ideas-list" id="ideas-list-no-internal"></div>
@@ -1031,6 +1050,17 @@
                 document.getElementById('with-jira-internal').textContent = withJira.toLocaleString();
                 document.getElementById('with-owner-internal').textContent = withOwner.toLocaleString();
                 document.getElementById('labels-only-internal').textContent = labelsOnly.toLocaleString();
+            } else if (tab === 'no-internal') {
+                document.getElementById('showing-no-internal').textContent = ideas.length.toLocaleString();
+                const highPriority = ideas.filter(i => i.priority === 'High').length;
+                const recent = ideas.filter(i => {
+                    const year = i.created ? i.created.substring(0, 4) : '';
+                    return year === '2025' || year === '2026';
+                }).length;
+                const outdated = ideas.filter(i => i.is_outdated).length;
+                document.getElementById('high-priority-no-internal').textContent = highPriority.toLocaleString();
+                document.getElementById('recent-no-internal').textContent = recent.toLocaleString();
+                document.getElementById('outdated-no-internal').textContent = outdated.toLocaleString();
             }
         }
 
