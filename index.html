@@ -458,6 +458,9 @@
         <div class="tab active" data-tab="all">
             All Ideas <span class="badge" id="all-count">0</span>
         </div>
+        <div class="tab" data-tab="internal-status">
+            With Internal Status <span class="badge" id="internal-status-count">0</span>
+        </div>
         <div class="tab" data-tab="outdated">
             Outdated <span class="badge" id="outdated-count">0</span>
         </div>
@@ -467,11 +470,8 @@
         <div class="tab" data-tab="status-gap">
             Status Gap <span class="badge" id="status-gap-count">0</span>
         </div>
-        <div class="tab" data-tab="no-jira">
-            No Jira <span class="badge" id="no-jira-count">0</span>
-        </div>
-        <div class="tab" data-tab="no-status">
-            No Public Status <span class="badge" id="no-status-count">0</span>
+        <div class="tab" data-tab="no-internal">
+            No Internal Status <span class="badge" id="no-internal-count">0</span>
         </div>
     </div>
 
@@ -552,6 +552,60 @@
                 </div>
                 <div class="ideas-list" id="ideas-list-all"></div>
                 <div class="pagination" id="pagination-all"></div>
+            </div>
+        </div>
+
+        <!-- Internal Status Tab -->
+        <div class="tab-content" id="internal-status-tab">
+            <div class="definition-box">
+                <h3>🔧 Ideas With Internal Status</h3>
+                <p>Ideas that have internal tracking indicators showing they're being worked on or monitored by your team.</p>
+                <div class="criteria">
+                    <strong>Internal Status Indicators:</strong>
+                    <ul>
+                        <li><strong>Jira Link</strong> - Connected to development backlog (480 ideas)</li>
+                        <li><strong>Assigned Owner</strong> - Someone is responsible (248 ideas)</li>
+                        <li><strong>Labels</strong> - Categorized/prioritized (e.g., Critical, PENT, 5-biz-day SLA, Top 3000)</li>
+                    </ul>
+                    <strong>Total with any internal status: 10,722 ideas (88%)</strong>
+                </div>
+                <p><strong>Common Labels:</strong></p>
+                <ul>
+                    <li><strong>"5-biz-day SLA"</strong> - Requires response within 5 business days</li>
+                    <li><strong>"Critical"</strong> - High priority issues</li>
+                    <li><strong>"PENT"</strong> - Enterprise accounts</li>
+                    <li><strong>"Top 3000"</strong> - Top customer accounts</li>
+                    <li><strong>"QA"</strong> - Currently in testing</li>
+                    <li><strong>"opportunity"</strong> - Tied to sales deals</li>
+                </ul>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="label">With Internal Status</div>
+                    <div class="value" id="showing-internal-status">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">With Jira</div>
+                    <div class="value" id="with-jira-internal">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">With Owner</div>
+                    <div class="value" id="with-owner-internal">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">With Labels Only</div>
+                    <div class="value" id="labels-only-internal">0</div>
+                </div>
+            </div>
+
+            <div class="ideas-table">
+                <div class="table-header">
+                    <h3>Ideas With Internal Tracking (Jira, Owner, or Labels)</h3>
+                    <button class="export-btn" onclick="exportToCSV('internal-status')">📥 Export to CSV</button>
+                </div>
+                <div class="ideas-list" id="ideas-list-internal-status"></div>
+                <div class="pagination" id="pagination-internal-status"></div>
             </div>
         </div>
 
@@ -778,6 +832,38 @@
                 <div class="pagination" id="pagination-no-status"></div>
             </div>
         </div>
+
+        <!-- No Internal Status Tab -->
+        <div class="tab-content" id="no-internal-tab">
+            <div class="definition-box">
+                <h3>❌ No Internal Status</h3>
+                <p>Ideas with zero internal tracking - no Jira link, no assigned owner, no labels. These are completely untracked internally.</p>
+                <div class="criteria">
+                    <strong>Definition:</strong> Ideas with:
+                    <ul>
+                        <li><strong>No Jira link</strong></li>
+                        <li><strong>No assigned owner</strong></li>
+                        <li><strong>No labels</strong></li>
+                    </ul>
+                </div>
+                <p><strong>What This Means:</strong> These ideas have fallen through the cracks - never triaged, never reviewed, never categorized.</p>
+                <p><strong>Action Recommendation:</strong></p>
+                <ul>
+                    <li><strong>High-value ideas</strong> (votes/revenue) → Immediate triage and label</li>
+                    <li><strong>Recent ideas</strong> (2025-2026) → Route through intake process</li>
+                    <li><strong>Old + no engagement</strong> → Consider bulk archiving</li>
+                </ul>
+            </div>
+
+            <div class="ideas-table">
+                <div class="table-header">
+                    <h3>Ideas With No Internal Tracking</h3>
+                    <button class="export-btn" onclick="exportToCSV('no-internal')">📥 Export to CSV</button>
+                </div>
+                <div class="ideas-list" id="ideas-list-no-internal"></div>
+                <div class="pagination" id="pagination-no-internal"></div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -816,11 +902,11 @@
             // Initialize filtered ideas for each tab
             filteredIdeas = {
                 'all': allIdeas,
+                'internal-status': allIdeas.filter(i => i.has_internal_status),
                 'outdated': allIdeas.filter(i => i.is_outdated),
                 'high-priority': allIdeas.filter(i => i.priority === 'High'),
                 'status-gap': allIdeas.filter(i => i.status_gap),
-                'no-jira': allIdeas.filter(i => !i.has_jira),
-                'no-status': allIdeas.filter(i => !i.has_public_status)
+                'no-internal': allIdeas.filter(i => !i.has_internal_status)
             };
 
             // Update counts
@@ -837,11 +923,11 @@
 
         function updateTabCounts() {
             document.getElementById('all-count').textContent = filteredIdeas['all'].length.toLocaleString();
+            document.getElementById('internal-status-count').textContent = filteredIdeas['internal-status'].length.toLocaleString();
             document.getElementById('outdated-count').textContent = filteredIdeas['outdated'].length.toLocaleString();
             document.getElementById('high-priority-count').textContent = filteredIdeas['high-priority'].length.toLocaleString();
             document.getElementById('status-gap-count').textContent = filteredIdeas['status-gap'].length.toLocaleString();
-            document.getElementById('no-jira-count').textContent = filteredIdeas['no-jira'].length.toLocaleString();
-            document.getElementById('no-status-count').textContent = filteredIdeas['no-status'].length.toLocaleString();
+            document.getElementById('no-internal-count').textContent = filteredIdeas['no-internal'].length.toLocaleString();
         }
 
         function renderIdeas(tab) {
@@ -937,6 +1023,14 @@
                 const withOwner = ideas.filter(i => i.has_owner).length;
                 document.getElementById('with-jira-status-gap').textContent = withJira.toLocaleString();
                 document.getElementById('with-owner-status-gap').textContent = withOwner.toLocaleString();
+            } else if (tab === 'internal-status') {
+                document.getElementById('showing-internal-status').textContent = ideas.length.toLocaleString();
+                const withJira = ideas.filter(i => i.has_jira).length;
+                const withOwner = ideas.filter(i => i.has_owner).length;
+                const labelsOnly = ideas.filter(i => !i.has_jira && !i.has_owner && i.labels && i.labels.length > 0).length;
+                document.getElementById('with-jira-internal').textContent = withJira.toLocaleString();
+                document.getElementById('with-owner-internal').textContent = withOwner.toLocaleString();
+                document.getElementById('labels-only-internal').textContent = labelsOnly.toLocaleString();
             }
         }
 
