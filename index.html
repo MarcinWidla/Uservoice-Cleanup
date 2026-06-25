@@ -458,6 +458,9 @@
         <div class="tab active" data-tab="all">
             All Ideas <span class="badge" id="all-count">0</span>
         </div>
+        <div class="tab" data-tab="advanced">
+            Advanced Search <span class="badge" id="advanced-count">0</span>
+        </div>
         <div class="tab" data-tab="internal-status">
             With Internal Status <span class="badge" id="internal-status-count">0</span>
         </div>
@@ -552,6 +555,218 @@
                 </div>
                 <div class="ideas-list" id="ideas-list-all"></div>
                 <div class="pagination" id="pagination-all"></div>
+            </div>
+        </div>
+
+        <!-- Advanced Search Tab -->
+        <div class="tab-content" id="advanced-tab">
+            <div class="definition-box">
+                <h3>🔍 Advanced Search</h3>
+                <p>Combine multiple filters to create your own custom view. All filters work together - select as many or as few as you need.</p>
+                <div class="criteria">
+                    <strong>How to use:</strong> Select your criteria below, then click "Apply Filters" to see matching ideas.
+                </div>
+            </div>
+
+            <div class="filters">
+                <h4 style="margin-bottom: 15px; color: #667eea;">🔎 Search & Text</h4>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Search Title/Description</label>
+                        <input type="text" id="search-advanced" placeholder="Keywords...">
+                    </div>
+                    <div class="filter-group">
+                        <label>Forum</label>
+                        <select id="forum-advanced">
+                            <option value="">All Forums</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Category</label>
+                        <input type="text" id="category-advanced" placeholder="Category name...">
+                    </div>
+                    <div class="filter-group">
+                        <label>Label Contains</label>
+                        <input type="text" id="label-advanced" placeholder="e.g., Critical, PENT...">
+                    </div>
+                </div>
+
+                <h4 style="margin: 20px 0 15px 0; color: #667eea;">📊 Priority & Engagement</h4>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Priority</label>
+                        <select id="priority-advanced">
+                            <option value="">All Priorities</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Min Votes</label>
+                        <input type="number" id="min-votes-advanced" placeholder="0" min="0">
+                    </div>
+                    <div class="filter-group">
+                        <label>Min Comments</label>
+                        <input type="number" id="min-comments-advanced" placeholder="0" min="0">
+                    </div>
+                    <div class="filter-group">
+                        <label>Min Revenue ($)</label>
+                        <input type="number" id="min-revenue-advanced" placeholder="0" min="0">
+                    </div>
+                </div>
+
+                <h4 style="margin: 20px 0 15px 0; color: #667eea;">📅 Age & Time</h4>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Year Created</label>
+                        <select id="year-advanced">
+                            <option value="">All Years</option>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021 and earlier</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Age (days)</label>
+                        <select id="age-advanced">
+                            <option value="">Any Age</option>
+                            <option value="0-30">Last 30 days</option>
+                            <option value="31-90">31-90 days</option>
+                            <option value="91-180">91-180 days (3-6 months)</option>
+                            <option value="181-365">181-365 days (6-12 months)</option>
+                            <option value="366+">Over 1 year</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Is Outdated?</label>
+                        <select id="outdated-advanced">
+                            <option value="">Any</option>
+                            <option value="yes">Yes (pre-2024 or 180+ days)</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Is Closed?</label>
+                        <select id="closed-advanced">
+                            <option value="">Any</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h4 style="margin: 20px 0 15px 0; color: #667eea;">🔧 Internal Status</h4>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Has Jira Link?</label>
+                        <select id="jira-advanced">
+                            <option value="">Any</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Has Assigned Owner?</label>
+                        <select id="owner-advanced">
+                            <option value="">Any</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Has Labels?</label>
+                        <select id="labels-exist-advanced">
+                            <option value="">Any</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Has Internal Status?</label>
+                        <select id="internal-status-advanced">
+                            <option value="">Any</option>
+                            <option value="yes">Yes (Jira/Owner/Labels)</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h4 style="margin: 20px 0 15px 0; color: #667eea;">📢 Public Status</h4>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Has Public Status?</label>
+                        <select id="public-status-advanced">
+                            <option value="">Any</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status Gap?</label>
+                        <select id="status-gap-advanced">
+                            <option value="">Any</option>
+                            <option value="yes">Yes (internal but no public)</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sort By</label>
+                        <select id="sort-advanced">
+                            <option value="age-desc">Oldest First</option>
+                            <option value="age-asc">Newest First</option>
+                            <option value="votes-desc">Most Votes</option>
+                            <option value="revenue-desc">Highest Revenue</option>
+                            <option value="comments-desc">Most Comments</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Results Limit</label>
+                        <select id="limit-advanced">
+                            <option value="50">50 per page</option>
+                            <option value="100">100 per page</option>
+                            <option value="250">250 per page</option>
+                            <option value="500">500 per page</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-buttons" style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="applyFilters('advanced')">🔍 Apply Filters</button>
+                    <button class="btn btn-secondary" onclick="resetFilters('advanced')">↺ Reset All</button>
+                    <button class="btn btn-secondary" onclick="saveAdvancedQuery()">💾 Save Query</button>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="label">Matching Ideas</div>
+                    <div class="value" id="showing-advanced">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Avg Age (days)</div>
+                    <div class="value" id="avg-age-advanced">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Total Votes</div>
+                    <div class="value" id="total-votes-advanced">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Total Revenue</div>
+                    <div class="value" id="total-revenue-advanced">$0</div>
+                </div>
+            </div>
+
+            <div class="ideas-table">
+                <div class="table-header">
+                    <h3>Advanced Search Results</h3>
+                    <button class="export-btn" onclick="exportToCSV('advanced')">📥 Export to CSV</button>
+                </div>
+                <div class="ideas-list" id="ideas-list-advanced"></div>
+                <div class="pagination" id="pagination-advanced"></div>
             </div>
         </div>
 
@@ -908,19 +1123,25 @@
         }
 
         function initializeDashboard() {
-            // Populate forum filter
+            // Populate forum filters
             const forums = [...new Set(allIdeas.map(i => i.forum).filter(f => f))].sort();
-            const forumSelect = document.getElementById('forum-all');
-            forums.forEach(forum => {
-                const option = document.createElement('option');
-                option.value = forum;
-                option.textContent = forum;
-                forumSelect.appendChild(option);
+            const forumSelects = ['forum-all', 'forum-advanced'];
+            forumSelects.forEach(selectId => {
+                const forumSelect = document.getElementById(selectId);
+                if (forumSelect) {
+                    forums.forEach(forum => {
+                        const option = document.createElement('option');
+                        option.value = forum;
+                        option.textContent = forum;
+                        forumSelect.appendChild(option);
+                    });
+                }
             });
 
             // Initialize filtered ideas for each tab
             filteredIdeas = {
                 'all': allIdeas,
+                'advanced': allIdeas,
                 'internal-status': allIdeas.filter(i => i.has_internal_status),
                 'outdated': allIdeas.filter(i => i.is_outdated),
                 'high-priority': allIdeas.filter(i => i.priority === 'High'),
@@ -942,6 +1163,7 @@
 
         function updateTabCounts() {
             document.getElementById('all-count').textContent = filteredIdeas['all'].length.toLocaleString();
+            document.getElementById('advanced-count').textContent = filteredIdeas['advanced'].length.toLocaleString();
             document.getElementById('internal-status-count').textContent = filteredIdeas['internal-status'].length.toLocaleString();
             document.getElementById('outdated-count').textContent = filteredIdeas['outdated'].length.toLocaleString();
             document.getElementById('high-priority-count').textContent = filteredIdeas['high-priority'].length.toLocaleString();
@@ -1017,14 +1239,15 @@
         }
 
         function updateStats(tab, ideas) {
-            if (tab === 'all') {
-                document.getElementById('showing-all').textContent = ideas.length.toLocaleString();
+            if (tab === 'all' || tab === 'advanced') {
+                const prefix = tab === 'all' ? 'all' : 'advanced';
+                document.getElementById(`showing-${prefix}`).textContent = ideas.length.toLocaleString();
                 const avgAge = ideas.reduce((sum, i) => sum + i.age_days, 0) / ideas.length || 0;
-                document.getElementById('avg-age-all').textContent = Math.round(avgAge);
+                document.getElementById(`avg-age-${prefix}`).textContent = Math.round(avgAge);
                 const totalVotes = ideas.reduce((sum, i) => sum + i.votes, 0);
-                document.getElementById('total-votes-all').textContent = totalVotes.toLocaleString();
+                document.getElementById(`total-votes-${prefix}`).textContent = totalVotes.toLocaleString();
                 const totalRevenue = ideas.reduce((sum, i) => sum + i.revenue, 0);
-                document.getElementById('total-revenue-all').textContent = `$${(totalRevenue / 1000000).toFixed(1)}M`;
+                document.getElementById(`total-revenue-${prefix}`).textContent = `$${(totalRevenue / 1000000).toFixed(1)}M`;
             } else if (tab === 'outdated') {
                 document.getElementById('showing-outdated').textContent = ideas.length.toLocaleString();
                 const canArchive = ideas.filter(i => i.votes === 0 && i.comments === 0 && !i.has_jira).length;
@@ -1142,6 +1365,87 @@
                 }
 
                 filteredIdeas['outdated'] = filtered;
+            } else if (tab === 'advanced') {
+                // Get all filter values
+                const search = document.getElementById('search-advanced').value.toLowerCase();
+                const forum = document.getElementById('forum-advanced').value;
+                const category = document.getElementById('category-advanced').value.toLowerCase();
+                const label = document.getElementById('label-advanced').value.toLowerCase();
+                const priority = document.getElementById('priority-advanced').value;
+                const minVotes = parseInt(document.getElementById('min-votes-advanced').value) || 0;
+                const minComments = parseInt(document.getElementById('min-comments-advanced').value) || 0;
+                const minRevenue = parseFloat(document.getElementById('min-revenue-advanced').value) || 0;
+                const year = document.getElementById('year-advanced').value;
+                const age = document.getElementById('age-advanced').value;
+                const outdated = document.getElementById('outdated-advanced').value;
+                const closed = document.getElementById('closed-advanced').value;
+                const jira = document.getElementById('jira-advanced').value;
+                const owner = document.getElementById('owner-advanced').value;
+                const labelsExist = document.getElementById('labels-exist-advanced').value;
+                const internalStatus = document.getElementById('internal-status-advanced').value;
+                const publicStatus = document.getElementById('public-status-advanced').value;
+                const statusGap = document.getElementById('status-gap-advanced').value;
+                const sort = document.getElementById('sort-advanced').value;
+
+                // Apply all filters
+                let filtered = allIdeas.filter(idea => {
+                    // Text search
+                    if (search && !idea.title.toLowerCase().includes(search) && !idea.description.toLowerCase().includes(search)) return false;
+                    if (forum && idea.forum !== forum) return false;
+                    if (category && !idea.category.toLowerCase().includes(category)) return false;
+                    if (label && !idea.labels.some(l => l.toLowerCase().includes(label))) return false;
+
+                    // Priority & engagement
+                    if (priority && idea.priority !== priority) return false;
+                    if (idea.votes < minVotes) return false;
+                    if (idea.comments < minComments) return false;
+                    if (idea.revenue < minRevenue) return false;
+
+                    // Age & time
+                    if (year) {
+                        const ideaYear = idea.created.substring(0, 4);
+                        if (year === '2021' && ideaYear > '2021') return false;
+                        if (year !== '2021' && ideaYear !== year) return false;
+                    }
+                    if (age) {
+                        if (age === '0-30' && idea.age_days > 30) return false;
+                        if (age === '31-90' && (idea.age_days <= 30 || idea.age_days > 90)) return false;
+                        if (age === '91-180' && (idea.age_days <= 90 || idea.age_days > 180)) return false;
+                        if (age === '181-365' && (idea.age_days <= 180 || idea.age_days > 365)) return false;
+                        if (age === '366+' && idea.age_days <= 365) return false;
+                    }
+                    if (outdated === 'yes' && !idea.is_outdated) return false;
+                    if (outdated === 'no' && idea.is_outdated) return false;
+                    if (closed === 'yes' && !idea.is_closed) return false;
+                    if (closed === 'no' && idea.is_closed) return false;
+
+                    // Internal status
+                    if (jira === 'yes' && !idea.has_jira) return false;
+                    if (jira === 'no' && idea.has_jira) return false;
+                    if (owner === 'yes' && !idea.has_owner) return false;
+                    if (owner === 'no' && idea.has_owner) return false;
+                    if (labelsExist === 'yes' && (!idea.labels || idea.labels.length === 0)) return false;
+                    if (labelsExist === 'no' && idea.labels && idea.labels.length > 0) return false;
+                    if (internalStatus === 'yes' && !idea.has_internal_status) return false;
+                    if (internalStatus === 'no' && idea.has_internal_status) return false;
+
+                    // Public status
+                    if (publicStatus === 'yes' && !idea.has_public_status) return false;
+                    if (publicStatus === 'no' && idea.has_public_status) return false;
+                    if (statusGap === 'yes' && !idea.status_gap) return false;
+                    if (statusGap === 'no' && idea.status_gap) return false;
+
+                    return true;
+                });
+
+                // Sort
+                if (sort === 'age-desc') filtered.sort((a, b) => b.age_days - a.age_days);
+                if (sort === 'age-asc') filtered.sort((a, b) => a.age_days - b.age_days);
+                if (sort === 'votes-desc') filtered.sort((a, b) => b.votes - a.votes);
+                if (sort === 'revenue-desc') filtered.sort((a, b) => b.revenue - a.revenue);
+                if (sort === 'comments-desc') filtered.sort((a, b) => b.comments - a.comments);
+
+                filteredIdeas['advanced'] = filtered;
             }
 
             currentPage[tab] = 1;
@@ -1162,11 +1466,66 @@
                 document.getElementById('jira-outdated').value = '';
                 document.getElementById('sort-outdated').value = 'age';
                 filteredIdeas['outdated'] = allIdeas.filter(i => i.is_outdated);
+            } else if (tab === 'advanced') {
+                document.getElementById('search-advanced').value = '';
+                document.getElementById('forum-advanced').value = '';
+                document.getElementById('category-advanced').value = '';
+                document.getElementById('label-advanced').value = '';
+                document.getElementById('priority-advanced').value = '';
+                document.getElementById('min-votes-advanced').value = '';
+                document.getElementById('min-comments-advanced').value = '';
+                document.getElementById('min-revenue-advanced').value = '';
+                document.getElementById('year-advanced').value = '';
+                document.getElementById('age-advanced').value = '';
+                document.getElementById('outdated-advanced').value = '';
+                document.getElementById('closed-advanced').value = '';
+                document.getElementById('jira-advanced').value = '';
+                document.getElementById('owner-advanced').value = '';
+                document.getElementById('labels-exist-advanced').value = '';
+                document.getElementById('internal-status-advanced').value = '';
+                document.getElementById('public-status-advanced').value = '';
+                document.getElementById('status-gap-advanced').value = '';
+                document.getElementById('sort-advanced').value = 'age-desc';
+                document.getElementById('limit-advanced').value = '50';
+                filteredIdeas['advanced'] = allIdeas;
             }
 
             currentPage[tab] = 1;
             updateTabCounts();
             renderIdeas(tab);
+        }
+
+        function saveAdvancedQuery() {
+            const query = {
+                search: document.getElementById('search-advanced').value,
+                forum: document.getElementById('forum-advanced').value,
+                category: document.getElementById('category-advanced').value,
+                label: document.getElementById('label-advanced').value,
+                priority: document.getElementById('priority-advanced').value,
+                minVotes: document.getElementById('min-votes-advanced').value,
+                minComments: document.getElementById('min-comments-advanced').value,
+                minRevenue: document.getElementById('min-revenue-advanced').value,
+                year: document.getElementById('year-advanced').value,
+                age: document.getElementById('age-advanced').value,
+                outdated: document.getElementById('outdated-advanced').value,
+                closed: document.getElementById('closed-advanced').value,
+                jira: document.getElementById('jira-advanced').value,
+                owner: document.getElementById('owner-advanced').value,
+                labelsExist: document.getElementById('labels-exist-advanced').value,
+                internalStatus: document.getElementById('internal-status-advanced').value,
+                publicStatus: document.getElementById('public-status-advanced').value,
+                statusGap: document.getElementById('status-gap-advanced').value,
+                sort: document.getElementById('sort-advanced').value
+            };
+
+            const queryString = btoa(JSON.stringify(query));
+            const url = window.location.origin + window.location.pathname + '?query=' + queryString;
+
+            navigator.clipboard.writeText(url).then(() => {
+                alert('✅ Query URL copied to clipboard!\n\nShare this URL to save your custom search.');
+            }).catch(() => {
+                alert('Query URL:\n\n' + url + '\n\nCopy this URL to save your custom search.');
+            });
         }
 
         function exportToCSV(tab) {
