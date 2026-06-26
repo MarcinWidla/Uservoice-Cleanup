@@ -482,54 +482,159 @@
         <!-- All Ideas Tab -->
         <div class="tab-content active" id="all-tab">
             <div class="definition-box">
-                <h3>📋 All Ideas</h3>
-                <p>This tab shows the complete dataset of all UserVoice ideas in your system. Use the filters below to narrow down by specific criteria.</p>
-                <div class="criteria">
-                    <strong>Includes:</strong> All 12,186 ideas regardless of age, status, or engagement level
+                <h3>📊 Database Overview</h3>
+                <p>Complete snapshot of your UserVoice ideas database. Use the <strong>Advanced Search</strong> tab to filter and explore.</p>
+            </div>
+
+            <!-- Overview Stats Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                <!-- Total & Activity -->
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1em;">📈 Total & Activity</h4>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">Total Ideas:</span>
+                            <strong id="overview-total">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">Avg Age:</span>
+                            <strong id="overview-avg-age">0 days</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">Oldest Idea:</span>
+                            <strong id="overview-oldest">0 days</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">Total Votes:</span>
+                            <strong id="overview-votes">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">Total Comments:</span>
+                            <strong id="overview-comments">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Priority Breakdown -->
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1em;">⭐ Priority Breakdown</h4>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #e74c3c;">● High Priority:</span>
+                            <strong id="overview-high">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #f39c12;">● Medium Priority:</span>
+                            <strong id="overview-medium">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #27ae60;">● Low Priority:</span>
+                            <strong id="overview-low">0</strong>
+                        </div>
+                        <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display: flex; justify-content: space-between;">
+                            <span style="color: #666;">Outdated:</span>
+                            <strong id="overview-outdated">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Internal Status -->
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1em;">🔧 Internal Tracking</h4>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">With Internal Status:</span>
+                            <strong id="overview-internal-yes">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #999;">└ Has Jira:</span>
+                            <strong id="overview-jira">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #999;">└ Has Owner:</span>
+                            <strong id="overview-owner">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #999;">└ Has Labels:</span>
+                            <strong id="overview-labels">0</strong>
+                        </div>
+                        <div style="border-top: 1px solid #eee; margin-top: 5px; padding-top: 10px; display: flex; justify-content: space-between;">
+                            <span style="color: #e74c3c;">No Internal Status:</span>
+                            <strong id="overview-internal-no">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue & Value -->
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1em;">💰 Revenue Impact</h4>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">Total Revenue:</span>
+                            <strong id="overview-revenue">$0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">Ideas > $100k:</span>
+                            <strong id="overview-100k">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">Ideas > $50k:</span>
+                            <strong id="overview-50k">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">Ideas with Revenue:</span>
+                            <strong id="overview-has-revenue">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #999;">No Revenue:</span>
+                            <strong id="overview-no-revenue">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Gap Warning -->
+                <div style="background: linear-gradient(135deg, #fee 0%, #fef5e7 100%); padding: 20px; border-radius: 8px; border-left: 4px solid #e74c3c;">
+                    <h4 style="color: #e74c3c; margin-bottom: 15px; font-size: 1.1em;">⚠️ Status Gap Alert</h4>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">Internal but no public:</span>
+                            <strong style="color: #e74c3c;" id="overview-gap">0</strong>
+                        </div>
+                        <p style="color: #666; font-size: 0.85em; margin: 10px 0 0 0;">
+                            These ideas have internal tracking but customers receive no communication.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Year Distribution -->
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1em;">📅 Age Distribution</h4>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">2026:</span>
+                            <strong id="overview-2026">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">2025:</span>
+                            <strong id="overview-2025">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">2024:</span>
+                            <strong id="overview-2024">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">2023:</span>
+                            <strong id="overview-2023">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #666;">2022 & earlier:</span>
+                            <strong id="overview-2022">0</strong>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="filters">
-                <div class="filters-grid">
-                    <div class="filter-group">
-                        <label>Search</label>
-                        <input type="text" id="search-all" placeholder="Search title or description...">
-                    </div>
-                    <div class="filter-group">
-                        <label>Priority</label>
-                        <select id="priority-all">
-                            <option value="">All Priorities</option>
-                            <option value="High">High</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Low">Low</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label>Forum</label>
-                        <select id="forum-all">
-                            <option value="">All Forums</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label>Year Created</label>
-                        <select id="year-all">
-                            <option value="">All Years</option>
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                            <option value="2021">2021 and earlier</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="filter-buttons">
-                    <button class="btn btn-primary" onclick="applyFilters('all')">Apply Filters</button>
-                    <button class="btn btn-secondary" onclick="resetFilters('all')">Reset</button>
-                </div>
-            </div>
-
-            <div class="stats-bar">
+            <div class="stats-bar" style="display: none;">
                 <div class="stat-item">
                     <div class="label">Showing</div>
                     <div class="value" id="showing-all">0</div>
@@ -1238,16 +1343,84 @@
             `;
         }
 
+        function updateOverviewInsights() {
+            // Total & Activity
+            document.getElementById('overview-total').textContent = allIdeas.length.toLocaleString();
+            const avgAge = allIdeas.reduce((sum, i) => sum + i.age_days, 0) / allIdeas.length;
+            document.getElementById('overview-avg-age').textContent = Math.round(avgAge) + ' days';
+            const oldest = Math.max(...allIdeas.map(i => i.age_days));
+            document.getElementById('overview-oldest').textContent = oldest.toLocaleString() + ' days';
+            const totalVotes = allIdeas.reduce((sum, i) => sum + i.votes, 0);
+            document.getElementById('overview-votes').textContent = totalVotes.toLocaleString();
+            const totalComments = allIdeas.reduce((sum, i) => sum + i.comments, 0);
+            document.getElementById('overview-comments').textContent = totalComments.toLocaleString();
+
+            // Priority Breakdown
+            const high = allIdeas.filter(i => i.priority === 'High').length;
+            const medium = allIdeas.filter(i => i.priority === 'Medium').length;
+            const low = allIdeas.filter(i => i.priority === 'Low').length;
+            document.getElementById('overview-high').textContent = `${high.toLocaleString()} (${Math.round(high*100/allIdeas.length)}%)`;
+            document.getElementById('overview-medium').textContent = `${medium.toLocaleString()} (${Math.round(medium*100/allIdeas.length)}%)`;
+            document.getElementById('overview-low').textContent = `${low.toLocaleString()} (${Math.round(low*100/allIdeas.length)}%)`;
+            const outdated = allIdeas.filter(i => i.is_outdated).length;
+            document.getElementById('overview-outdated').textContent = `${outdated.toLocaleString()} (${Math.round(outdated*100/allIdeas.length)}%)`;
+
+            // Internal Status
+            const withInternal = allIdeas.filter(i => i.has_internal_status).length;
+            const withJira = allIdeas.filter(i => i.has_jira).length;
+            const withOwner = allIdeas.filter(i => i.has_owner).length;
+            const withLabels = allIdeas.filter(i => i.labels && i.labels.length > 0).length;
+            const noInternal = allIdeas.length - withInternal;
+            document.getElementById('overview-internal-yes').textContent = `${withInternal.toLocaleString()} (${Math.round(withInternal*100/allIdeas.length)}%)`;
+            document.getElementById('overview-jira').textContent = withJira.toLocaleString();
+            document.getElementById('overview-owner').textContent = withOwner.toLocaleString();
+            document.getElementById('overview-labels').textContent = withLabels.toLocaleString();
+            document.getElementById('overview-internal-no').textContent = `${noInternal.toLocaleString()} (${Math.round(noInternal*100/allIdeas.length)}%)`;
+
+            // Revenue & Value
+            const totalRevenue = allIdeas.reduce((sum, i) => sum + i.revenue, 0);
+            document.getElementById('overview-revenue').textContent = `$${(totalRevenue / 1000000).toFixed(1)}M`;
+            const over100k = allIdeas.filter(i => i.revenue >= 100000).length;
+            const over50k = allIdeas.filter(i => i.revenue >= 50000).length;
+            const hasRevenue = allIdeas.filter(i => i.revenue > 0).length;
+            const noRevenue = allIdeas.length - hasRevenue;
+            document.getElementById('overview-100k').textContent = over100k.toLocaleString();
+            document.getElementById('overview-50k').textContent = over50k.toLocaleString();
+            document.getElementById('overview-has-revenue').textContent = hasRevenue.toLocaleString();
+            document.getElementById('overview-no-revenue').textContent = noRevenue.toLocaleString();
+
+            // Status Gap
+            const statusGap = allIdeas.filter(i => i.status_gap).length;
+            document.getElementById('overview-gap').textContent = `${statusGap.toLocaleString()} (${Math.round(statusGap*100/allIdeas.length)}%)`;
+
+            // Year Distribution
+            const year2026 = allIdeas.filter(i => i.created.startsWith('2026')).length;
+            const year2025 = allIdeas.filter(i => i.created.startsWith('2025')).length;
+            const year2024 = allIdeas.filter(i => i.created.startsWith('2024')).length;
+            const year2023 = allIdeas.filter(i => i.created.startsWith('2023')).length;
+            const year2022 = allIdeas.filter(i => {
+                const year = i.created.substring(0, 4);
+                return year && year <= '2022';
+            }).length;
+            document.getElementById('overview-2026').textContent = year2026.toLocaleString();
+            document.getElementById('overview-2025').textContent = year2025.toLocaleString();
+            document.getElementById('overview-2024').textContent = year2024.toLocaleString();
+            document.getElementById('overview-2023').textContent = year2023.toLocaleString();
+            document.getElementById('overview-2022').textContent = year2022.toLocaleString();
+        }
+
         function updateStats(tab, ideas) {
-            if (tab === 'all' || tab === 'advanced') {
-                const prefix = tab === 'all' ? 'all' : 'advanced';
-                document.getElementById(`showing-${prefix}`).textContent = ideas.length.toLocaleString();
+            if (tab === 'all') {
+                // For "all" tab, show overview insights instead
+                updateOverviewInsights();
+            } else if (tab === 'advanced') {
                 const avgAge = ideas.reduce((sum, i) => sum + i.age_days, 0) / ideas.length || 0;
-                document.getElementById(`avg-age-${prefix}`).textContent = Math.round(avgAge);
+                document.getElementById('avg-age-advanced').textContent = Math.round(avgAge);
                 const totalVotes = ideas.reduce((sum, i) => sum + i.votes, 0);
-                document.getElementById(`total-votes-${prefix}`).textContent = totalVotes.toLocaleString();
+                document.getElementById('total-votes-advanced').textContent = totalVotes.toLocaleString();
                 const totalRevenue = ideas.reduce((sum, i) => sum + i.revenue, 0);
-                document.getElementById(`total-revenue-${prefix}`).textContent = `$${(totalRevenue / 1000000).toFixed(1)}M`;
+                document.getElementById('total-revenue-advanced').textContent = `$${(totalRevenue / 1000000).toFixed(1)}M`;
+                document.getElementById('showing-advanced').textContent = ideas.length.toLocaleString();
             } else if (tab === 'outdated') {
                 document.getElementById('showing-outdated').textContent = ideas.length.toLocaleString();
                 const canArchive = ideas.filter(i => i.votes === 0 && i.comments === 0 && !i.has_jira).length;
@@ -1312,22 +1485,8 @@
 
         function applyFilters(tab) {
             if (tab === 'all') {
-                const search = document.getElementById('search-all').value.toLowerCase();
-                const priority = document.getElementById('priority-all').value;
-                const forum = document.getElementById('forum-all').value;
-                const year = document.getElementById('year-all').value;
-
-                filteredIdeas['all'] = allIdeas.filter(idea => {
-                    if (search && !idea.title.toLowerCase().includes(search) && !idea.description.toLowerCase().includes(search)) return false;
-                    if (priority && idea.priority !== priority) return false;
-                    if (forum && idea.forum !== forum) return false;
-                    if (year) {
-                        const ideaYear = idea.created.substring(0, 4);
-                        if (year === '2021' && ideaYear > '2021') return false;
-                        if (year !== '2021' && ideaYear !== year) return false;
-                    }
-                    return true;
-                });
+                // No filters for "all" tab - use Advanced Search instead
+                return;
             } else if (tab === 'outdated') {
                 const search = document.getElementById('search-outdated').value.toLowerCase();
                 const engagement = document.getElementById('engagement-outdated').value;
@@ -1455,11 +1614,8 @@
 
         function resetFilters(tab) {
             if (tab === 'all') {
-                document.getElementById('search-all').value = '';
-                document.getElementById('priority-all').value = '';
-                document.getElementById('forum-all').value = '';
-                document.getElementById('year-all').value = '';
-                filteredIdeas['all'] = allIdeas;
+                // No filters to reset for "all" tab
+                return;
             } else if (tab === 'outdated') {
                 document.getElementById('search-outdated').value = '';
                 document.getElementById('engagement-outdated').value = '';
